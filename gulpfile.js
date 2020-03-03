@@ -5,6 +5,9 @@ const browsersync = require("browser-sync").create();
 const del = require("del");
 const gulp = require("gulp");
 const merge = require("merge-stream");
+const http = require('http');
+const connect = require('connect');
+const serveStatic = require('serve-static');
 
 // BrowserSync
 function browserSync(done) {
@@ -47,6 +50,11 @@ function watchFiles() {
   gulp.watch("./**/*.css", browserSyncReload);
   gulp.watch("./**/*.html", browserSyncReload);
 }
+
+gulp.task('http', (done) => {
+  const app = connect().use(serveStatic('.'));
+  http.createServer(app).listen(3000, done);
+});
 
 // Define complex tasks
 const vendor = gulp.series(clean, modules);
